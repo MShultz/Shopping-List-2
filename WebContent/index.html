@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="style.css" rel="stylesheet" type="text/css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="Scripts/script.js"></script>
+<meta charset="ISO-8859-1">
+<title>Mary's Shopping List</title>
+</head>
+<body onload="openConnection()">
+
+	<!-- This is the welcome page! -->
+	<div class="WelcomePage" id="initialPage">
+		<h1 id="welcome">Welcome to Mary's Shopping List Web App</h1>
+		<ul>
+			<li><a href="javascript:toSignUp('initialPage')" class="links">Sign
+					up</a></li>
+			<li><a href="javascript:toLogin('initialPage')" class="links">Login
+					:)</a></li>
+		</ul>
+	</div>
+
+	<!-- This is the login page! -->
+	<div class="login" id="LoginPage">
+		<div id="titleandinfo">
+			<h1>Welcome to The Shopping List!</h1>
+			<h2>
+				Sign up to use. Not a member yet? <a
+					href="javascript:toSignUp('LoginPage')" id="link">Sign Up now.</a>
+			</h2>
+		</div>
+		<form action="javascript:login()" class="userInfo">
+			<h2>
+				Username <input type="text" name="username" class="textbox"
+					id="logUsername">
+			</h2>
+			<br>
+			<h2>
+				Password <input type="password" name="pword" class="textbox"
+					id="logPassword">
+			</h2>
+			<br> <input type="submit" value="Login" class="submit">
+		</form>
+		<h2 id="errorMessage"></h2>
+	</div>
+
+	<!-- This is the SignupPage! -->
+	<div class="login" id="SignupPage">
+		<div id="titleandinfo">
+			<h1 id="welcome">Welcome New User!</h1>
+			<h2>
+				Sign up to use. Already a member? <a
+					href="javascript:toLogin('SignupPage')" id="link">Login now!</a>
+			</h2>
+		</div>
+		<form action="javascript:signup()" method="post" id="userInfo">
+			<h2>
+				Username <input type="text" name="username" class="textbox" id="signUsername">
+			</h2>
+			<br>
+			<h2>
+				Password <input type="password" name="pword" class="textbox" id="signPass">
+			</h2>
+			<br>
+			<h2>
+				Confirm <input type="password" name="confirm" class="textbox" id="signConfirm">
+			</h2>
+			<br> <input type="submit" value="Sign Up" class="submit">
+		</form>
+		<h2 id="errorMessage"></h2>
+	</div>
+
+	<!-- This is the List Page! -->
+	<div id="ListPage">
+		<h1 id="welcome">Welcome, ${sessionScope.username}!</h1>
+		<form action="javascript:toHome('ListPage')" id="logout">
+			<input type="submit" value="Logout" id="submit">
+		</form>
+		<h2>Here are your current lists</h2>
+
+		<fieldset id="currentlists">
+			<legend> ${listTitle} </legend>
+			<table>
+				<tr>
+					<th>Quantity</th>
+					<th>Item</th>
+					<th>Weight</th>
+					<th>Price</th>
+				</tr>
+				<tr>
+					<td>${quantity}</td>
+					<td>${item}</td>
+					<td>${weight}</td>
+					<td class="price">$${itemPrice}</td> 
+				<tr>
+					<td colspan="4" id="total">Total Price: $ </td>
+				</tr>
+			</table>
+		</fieldset>
+		<br />
+		<h2>Need to edit or delete a list?</h2>
+		<form method="post">
+			<select name="listChoice"> 
+				<option value="${listname}">${listname}</option>
+			</select> <br>
+			<h2>Deleting cannot be undone!!!</h2>
+			<input type="submit" value="Delete List"
+				onClick="form.action='deletelist'" id="submit"> <input
+				type="submit" value="Edit" onClick="form.action='editforward'"
+				id="submit"> <input type="submit" value="Add Item"
+				onClick="form.action='addforward';" id="submit">
+		</form>
+	
+		<form action="addList" method="post">
+			<h2>List Name</h2>
+			<input type="text" name="listname" id="textbox"> <input
+				type="submit" value="Create a new List!" name="addList" id="submit">
+		</form>
+		<h2>${errorMessage}</h2>
+	</div>
+</body>
+</html>
