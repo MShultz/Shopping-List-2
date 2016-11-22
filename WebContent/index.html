@@ -9,14 +9,14 @@
 <title>Mary's Shopping List</title>
 </head>
 <body onload="openConnection()">
-
+	<h2 id="test">I am here</h2>
 	<!-- This is the welcome page! -->
-	<div class="WelcomePage" id="initialPage">
+	<div class="WelcomePage" id="InitialPage">
 		<h1 id="welcome">Welcome to Mary's Shopping List Web App</h1>
 		<ul>
-			<li><a href="javascript:toSignUp('initialPage')" class="links">Sign
+			<li><a href="javascript:toSignUp('InitialPage')" class="links">Sign
 					up</a></li>
-			<li><a href="javascript:toLogin('initialPage')" class="links">Login
+			<li><a href="javascript:toLogin('InitialPage')" class="links">Login
 					:)</a></li>
 		</ul>
 	</div>
@@ -42,7 +42,7 @@
 			</h2>
 			<br> <input type="submit" value="Login" class="submit">
 		</form>
-		<h2 id="errorMessage"></h2>
+		<h2 id="errorMessageL"></h2>
 	</div>
 
 	<!-- This is the SignupPage! -->
@@ -56,68 +56,143 @@
 		</div>
 		<form action="javascript:signup()" method="post" id="userInfo">
 			<h2>
-				Username <input type="text" name="username" class="textbox" id="signUsername">
+				Username <input type="text" name="username" class="textbox"
+					id="signUsername">
 			</h2>
 			<br>
 			<h2>
-				Password <input type="password" name="pword" class="textbox" id="signPass">
+				Password <input type="password" name="pword" class="textbox"
+					id="signPass">
 			</h2>
 			<br>
 			<h2>
-				Confirm <input type="password" name="confirm" class="textbox" id="signConfirm">
+				Confirm <input type="password" name="confirm" class="textbox"
+					id="signConfirm">
 			</h2>
 			<br> <input type="submit" value="Sign Up" class="submit">
 		</form>
-		<h2 id="errorMessage"></h2>
+		<h2 id="errorMessageS"></h2>
 	</div>
 
 	<!-- This is the List Page! -->
 	<div id="ListPage">
-		<h1 id="welcome">Welcome, ${sessionScope.username}!</h1>
+		<h1 class="welcome" id="userWelcome"></h1>
 		<form action="javascript:toHome('ListPage')" id="logout">
-			<input type="submit" value="Logout" id="submit">
+			<input type="submit" value="Logout" class="submit">
 		</form>
-		<h2>Here are your current lists</h2>
-
-		<fieldset id="currentlists">
-			<legend> ${listTitle} </legend>
-			<table>
-				<tr>
-					<th>Quantity</th>
-					<th>Item</th>
-					<th>Weight</th>
-					<th>Price</th>
-				</tr>
-				<tr>
-					<td>${quantity}</td>
-					<td>${item}</td>
-					<td>${weight}</td>
-					<td class="price">$${itemPrice}</td> 
-				<tr>
-					<td colspan="4" id="total">Total Price: $ </td>
-				</tr>
-			</table>
-		</fieldset>
-		<br />
+		<h2 id='listMsg'>Here are your current lists; if you see no lists, all your lists are empty.</h2>
+	<div id=lists>
+	
+	</div>
 		<h2>Need to edit or delete a list?</h2>
 		<form method="post">
-			<select name="listChoice"> 
-				<option value="${listname}">${listname}</option>
+			<select name="listChoice" id="listChoice">
 			</select> <br>
 			<h2>Deleting cannot be undone!!!</h2>
 			<input type="submit" value="Delete List"
-				onClick="form.action='deletelist'" id="submit"> <input
-				type="submit" value="Edit" onClick="form.action='editforward'"
-				id="submit"> <input type="submit" value="Add Item"
-				onClick="form.action='addforward';" id="submit">
+				onClick="form.action='javascript:deleteList()'" class="submit">
+			<input type="submit" value="Edit" onClick="form.action='editforward'"
+				class="submit"> <input type="submit" value="Add Item"
+				onClick="form.action='javascript:toAddItem(\'ListPage\')'"
+				class="submit">
 		</form>
-	
-		<form action="addList" method="post">
+
+		<form action="javascript:createList()" method="post" id="AddList">
 			<h2>List Name</h2>
-			<input type="text" name="listname" id="textbox"> <input
-				type="submit" value="Create a new List!" name="addList" id="submit">
+			<input type="text" name="listname" class="textbox" id="listName">
+			<input type="submit" value="Create a new List!" name="addList"
+				class="submit">
 		</form>
-		<h2>${errorMessage}</h2>
+		<h2 id="errorMessage"></h2>
+	</div>
+
+	<!-- This is the Add Item Page -->
+	<div id=ItemPage>
+
+		<h1>Fill out the form below to add an item to your shopping list</h1>
+		<h2>
+			Note: To add more entries, you'll need to edit your list at the main
+			page.<br> Invalid/empty inputs will be set to a default; an
+			empty item descriptor will be ignored.<br> Prices with currency
+			symbols, and weights with measurements will be ignored. Please do not
+			add these to your entry.
+		</h2>
+
+		<fieldset>
+			<legend id="addListName">~</legend>
+			<form action="javascript:addItem()" method="post">
+				<div>
+					<h2>
+						<div class="title">Quantity:</div>
+						<input type="number" name="quantity" min="1" class="textbox"
+							id="itemQuanity">
+					</h2>
+				</div>
+				<div>
+					<h2>
+						<div class="title">Item:</div>
+						<input type="text" name="item" class="textbox"
+							id="itemDescription">
+					</h2>
+				</div>
+				<div>
+					<h2>
+						<div class="title">Weight:</div>
+						<input type="number" name="weight" min="0" step=".1"
+							class="textbox" id="itemWeight">
+					</h2>
+				</div>
+				<div>
+					<h2>
+						<div class="title">Price:</div>
+						<input type="number" min="0" step=".01" name="price"
+							class="textbox" id="itemPrice">
+					</h2>
+				</div>
+				<input type="submit" value="Add to your List!" class="submit">
+			</form>
+		</fieldset>
+	</div>
+
+	<div id="EditPage">
+		<fieldset>
+			<legend> ${listname} </legend>
+			<form action=create method="post">
+				<div>
+					<h2>
+						<div id="title">Quantity</div>
+						<input type="text" name="quantity" value="${quantity}"
+							id="textbox">
+					</h2>
+				</div>
+				<div>
+					<h2>
+						<div id="title">Item</div>
+						<input type="text" name="item" value="${item}" id="textbox">
+					</h2>
+				</div>
+				<div>
+					<h2>
+						<div id="title">Weight</div>
+						<input type="text" name="weight" value="${weight}" id="textbox">
+					</h2>
+				</div>
+				<p>
+				<div>
+					<h2>
+						<div id="title">Price</div>
+						<input type="text" name="price" value="${itemPrice}" id="textbox">
+					</h2>
+				</div>
+				<input type="submit" value="Edit this entry!"
+					onClick="form.action='create'" id="submit"> <input
+					type="submit" value="Delete this entry!"
+					onClick="form.action='deleteitem'" id="submit"> <input
+					type="hidden" name="listname" value="${listname}"> <input
+					type="hidden" name="item_ID" value="${item_ID}"> <input
+					type="hidden" name="source" value="edit">
+			</form>
+		</fieldset>
 	</div>
 </body>
 </html>

@@ -3,12 +3,13 @@
 	src: url('Font/BrookeS8.ttf');
 }
 
-
-#ListPage, #LoginPage, #SignupPage{
-	display:none;
+#ListPage, #LoginPage, #SignupPage, #ItemPage, #EditPage {
+	display: none;
 }
 
-
+#InitialPage {
+	display: inline;
+}
 
 body {
 	font-family: 'defaultfont';
@@ -61,13 +62,14 @@ form#logout {
 	float: right;
 }
 
-div#title {
+div.title {
 	width: 15px;
 }
 
-#total{
+#total {
 	text-align: right;
 }
+
 form.userInfo {
 	margin: auto;
 	width: 400px;
@@ -118,7 +120,7 @@ input.textbox {
 	margin: -175px 0 0 -150px;
 }
 
-#welcome {
+.welcome {
 	text-align: center;
 	margin-top: 35px;
 	margin-bottom: 35px;
