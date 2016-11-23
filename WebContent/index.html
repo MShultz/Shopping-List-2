@@ -9,7 +9,6 @@
 <title>Mary's Shopping List</title>
 </head>
 <body onload="openConnection()">
-	<h2 id="test">I am here</h2>
 	<!-- This is the welcome page! -->
 	<div class="WelcomePage" id="InitialPage">
 		<h1 id="welcome">Welcome to Mary's Shopping List Web App</h1>
@@ -91,7 +90,7 @@
 			<h2>Deleting cannot be undone!!!</h2>
 			<input type="submit" value="Delete List"
 				onClick="form.action='javascript:deleteList()'" class="submit">
-			<input type="submit" value="Edit" onClick="form.action='editforward'"
+			<input type="submit" value="Edit" onClick="form.action='javascript:toEditPage()'"
 				class="submit"> <input type="submit" value="Add Item"
 				onClick="form.action='javascript:toAddItem(\'ListPage\')'"
 				class="submit">
@@ -99,7 +98,7 @@
 
 		<form action="javascript:createList()" method="post" id="AddList">
 			<h2>List Name</h2>
-			<input type="text" name="listname" class="textbox" id="listName">
+			<input type="text" name="listname" class="textbox" id="newListName">
 			<input type="submit" value="Create a new List!" name="addList"
 				class="submit">
 		</form>
@@ -154,45 +153,8 @@
 		</fieldset>
 	</div>
 
-	<div id="EditPage">
-		<fieldset>
-			<legend> ${listname} </legend>
-			<form action=create method="post">
-				<div>
-					<h2>
-						<div id="title">Quantity</div>
-						<input type="text" name="quantity" value="${quantity}"
-							id="textbox">
-					</h2>
-				</div>
-				<div>
-					<h2>
-						<div id="title">Item</div>
-						<input type="text" name="item" value="${item}" id="textbox">
-					</h2>
-				</div>
-				<div>
-					<h2>
-						<div id="title">Weight</div>
-						<input type="text" name="weight" value="${weight}" id="textbox">
-					</h2>
-				</div>
-				<p>
-				<div>
-					<h2>
-						<div id="title">Price</div>
-						<input type="text" name="price" value="${itemPrice}" id="textbox">
-					</h2>
-				</div>
-				<input type="submit" value="Edit this entry!"
-					onClick="form.action='create'" id="submit"> <input
-					type="submit" value="Delete this entry!"
-					onClick="form.action='deleteitem'" id="submit"> <input
-					type="hidden" name="listname" value="${listname}"> <input
-					type="hidden" name="item_ID" value="${item_ID}"> <input
-					type="hidden" name="source" value="edit">
-			</form>
-		</fieldset>
+	<div id="EditPage"> 
+		
 	</div>
 </body>
 </html>

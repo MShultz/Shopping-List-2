@@ -17,6 +17,9 @@ import shultz.shopping2.DataHandler;
 import shultz.Packets.All_InfoResponsePacket;
 import shultz.Packets.CommandPacket;
 import shultz.Packets.CommandPacket.CommandType;
+import shultz.Packets.ItemPacket.ActionType;
+import shultz.Packets.ItemResponsePacket;
+import shultz.Packets.ItemPacket;
 import shultz.Packets.ListPacket;
 import shultz.Packets.ListPacket.ListPacketType;
 import shultz.Packets.ListResponsePacket;
@@ -56,16 +59,39 @@ public class UserSocket {
 				packet = new List_InfoResponsePacket(currentPacket.getUsername(), currentPacket.getListName());
 			else
 				packet = new List_NameResponsePacket(currentPacket.getUsername());
+		} else if (message.contains("Item")) {
+			ItemPacket currentPacket = new ItemPacket(message);
+			packet = new ItemResponsePacket(true);
+			if (currentPacket.getType() == ActionType.DELETE) {
+				handleItemDelete(currentPacket.getItemId());
+			} else {
+				handleItemUpdate(currentPacket.getOriginalItem(), currentPacket.getPrice(), currentPacket.getWeight(),
+						currentPacket.getQuantity(),
+						DataHandler.getList_ID(DataHandler.getUserID(currentPacket.getUsername()),
+								currentPacket.getListname()),
+						currentPacket.getItemId(), currentPacket.getItem());
+			}
 		}
 		clientSession.getBasicRemote().sendText(packet.serialize());
 
+	}
+
+	private void handleItemUpdate(String originalItem, double price, double weight, int quantity, int list_ID,
+			int item_ID, String newItem) {
+		handleItemDetails(originalItem, list_ID, price, weight, quantity);
+		if (!originalItem.equals(newItem))
+			handleUpdateItemName(newItem, list_ID, item_ID);
+	}
+
+	private void handleItemDelete(int item_ID) {
+		DataHandler.executeUpdate("DELETE From listDetails where item_ID=" + item_ID);
 	}
 
 	private ResponsePacket insertDetails(String username, String listname, String itemDescription, int quantity,
 			double weight, double price) {
 		ListResponsePacket response = new ListResponsePacket(listname, username, false, "That item already exists",
 				"ItemPage", "AddItem");
-		if (!itemDescription.isEmpty() && itemDescription != null) {
+		if (itemDescription != null && !itemDescription.isEmpty() ) {
 			response.setSuccess(true);
 			response.setErrorMessage("");
 			handleItemAddition(itemDescription, DataHandler.getList_ID(DataHandler.getUserID(username), listname),
@@ -76,6 +102,7 @@ public class UserSocket {
 
 	private void handleItemAddition(String itemDescription, int list_ID, double price, double weight, int quantity) {
 		if (!itemExists(itemDescription, list_ID)) {
+			System.out.println(list_ID);
 			handleDescription(itemDescription, list_ID);
 			handleItemDetails(itemDescription, list_ID, price, weight, quantity);
 		}
@@ -88,6 +115,11 @@ public class UserSocket {
 				+ " AND description = \"" + itemDescription + "\"");
 		DataHandler.executeUpdate("UPDATE listDetails SET weight=" + weight + " WHERE list_ID =" + list_ID
 				+ " AND description = \"" + itemDescription + "\"");
+	}
+
+	private void handleUpdateItemName(String newDescription, int list_ID, int item_ID) {
+		DataHandler.executeUpdate("UPDATE listDetails SET description=\"" + newDescription + "\" WHERE list_ID ="
+				+ list_ID + " AND item_ID =" + item_ID);
 	}
 
 	private boolean itemExists(String item, int list_ID) {
@@ -132,12 +164,12 @@ public class UserSocket {
 			response.setSuccess(false);
 			response.setErrorMessage("You already have a list by the name:" + listname + ".");
 		} else {
-			addList(user_ID, listname);
+			createList(user_ID, listname);
 		}
 		return response;
 	}
 
-	private void addList(int user_ID, String listname) {
+	private void createList(int user_ID, String listname) {
 		DataHandler.executeUpdate(
 				"INSERT into userLists (user_ID, listname) VALUES (" + user_ID + ",\"" + listname + "\");");
 	}
@@ -156,15 +188,12 @@ public class UserSocket {
 	}
 
 	private ResponsePacket signUp(String username, String pass, String confirmPass, String previousLocation) {
-		System.out.println("Made it to sign up.");
 		UserResponsePacket response = new UserResponsePacket(username, true, "", previousLocation);
 		try {
 			if (usernameExists(username)) {
-				System.out.println("Username Exists");
 				response.setSuccess(false);
 				response.setErrorMessage("Unfortunately, this username already exists.");
 			} else if (passwordsAreEqual(pass, confirmPass)) {
-				System.out.println("Creating user");
 				createUser(username, pass);
 			} else {
 				System.out.println("Passwords don't match");
@@ -179,7 +208,7 @@ public class UserSocket {
 		return response;
 	}
 
-	private void createUser(String username, String password){
+	private void createUser(String username, String password) {
 		DataHandler.executeUpdate("INSERT into users (username, `password`) VALUES (\"" + username + "\",\""
 				+ DataHandler.handlePassword(password) + "\");");
 		System.out.println("Created the user");

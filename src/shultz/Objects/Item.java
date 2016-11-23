@@ -16,7 +16,7 @@ public class Item {
 	}
 
 	public String serialize() {
-		return item_ID + "\n" + description + "\n" + quantity + "\n" + weight + "\n" + price;
+		return item_ID + "\n" + description + "\n" + quantity + "\n" + weight + "\n" + price + "\n";
 	}
 
 	public String getDescription() {

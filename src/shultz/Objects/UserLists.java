@@ -31,11 +31,12 @@ public class UserLists {
 	public String serialize(){
 		String lists = username + "\n" + userLists.size() + "\n";
 		for(List list: userLists){
-			lists+=list.serialize();
+			lists+= list.serialize();
 		}
-		return lists;
+		return lists.trim();
 	}
 	private void addList(List list){
+		if(list.getListItems().size() > 0)
 		userLists.add(list);
 	}
 	public ArrayList<List> getUserLists() {
