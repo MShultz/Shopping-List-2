@@ -202,6 +202,14 @@ function handleEditForm(information) {
 	}
 	elementDiv.appendChild(fieldset);
 }
+
+function clearAddItem(){
+	$('#itemQuantity').val('');
+	$('#itemDescription').val('');
+	$('#itemWeight').val('');
+	$('#itemPrice').val('');
+	$('#listName').val('');
+}
 function createFieldset(listName) {
 	var currentFieldSet = document.createElement('fieldset');
 	var legend = document.createElement('legend');
@@ -260,6 +268,7 @@ function toListPage(previousLocation) {
 	requestAllListInformation();
 	document.getElementById('newListName').value = '';
 	document.getElementById('ListPage').style.display = 'inline';
+	clearAddItem();
 
 }
 
@@ -273,7 +282,6 @@ function toAddItem(previousLocation, listName) {
 	document.getElementById('addListName').innerHTML = listName;
 	document.getElementById('newListName').value = listName;
 	document.getElementById('ItemPage').style.display = 'inline';
-	document.getElementById('listName').value = "";
 }
 function toAddItem(previousLocation) {
 	var listName = getSelectedList();
@@ -281,7 +289,6 @@ function toAddItem(previousLocation) {
 	document.getElementById('addListName').innerHTML = listName;
 	document.getElementById('newListName').value = listName;
 	document.getElementById('ItemPage').style.display = 'inline';
-	document.getElementById('listName').value = "";
 }
 
 function login() {
@@ -377,7 +384,7 @@ function deleteList() {
 function addItem() {
 	var listname = $('#newListName').val();
 	var description = document.getElementById("itemDescription").value;
-	var quantity = document.getElementById("itemQuanity").value;
+	var quantity = document.getElementById("itemQuantity").value;
 	var weight = document.getElementById("itemWeight").value;
 	var price = document.getElementById("itemPrice").value;
 	var strPacket = "ListPacket\nAddItem\n" + listname + "\n" + username + "\n"
